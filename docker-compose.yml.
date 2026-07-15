@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  spotify_db:
+    image: postgres:15-alpine
+    container_name: spotify_postgres_container
+    environment:
+      POSTGRES_DB: spotify_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: securepassword123
+    ports:
+      - "5432:5432"
+    volumes:
+      # Automatically initializes the schema on the first startup
+      - ./data/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
