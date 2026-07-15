@@ -1,0 +1,35 @@
+name: SQL Linting and Quality Gate
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  lint-sql:
+    name: Run SQLFluff Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code from your repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Python (required to run SQLFluff)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Step 3: Install SQLFluff via pip
+      - name: Install SQLFluff
+        run: |
+          pip install --upgrade pip
+          pip install sqlfluff
+
+      # Step 4: Run the linter on your SQL query files
+      # This checks all .sql files using PostgreSQL syntax rules
+      - name: Lint SQL Files
+        run: |
+          sqlfluff lint --dialect postgres .
